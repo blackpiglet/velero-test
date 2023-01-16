@@ -56,6 +56,15 @@ elif [[ "$triggeredBy" == "tags" ]]; then
     TAG=$(echo $GITHUB_REF | cut -d / -f 3)
 fi
 
+echo $BRANCH
+# if both BRANCH and TAG are empty, then it's triggered by PR. Use target branch instead.
+if [[ -z $BRANCH && -z $TAG ]]; then
+    BRANCH="${GITHUB_BASE_REF}-container"
+fi
+echo $BRANCH
+echo $TAG
+
+
 TAG_LATEST=false
 if [[ ! -z "$TAG" ]]; then
     echo "We're building tag $TAG"
