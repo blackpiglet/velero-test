@@ -1,7 +1,7 @@
 name: build-image
 
 on:
-  push:
+  pull-request:
     branches: [ main ]
     paths:
     - 'hack/build-image/Dockerfile'
@@ -28,8 +28,8 @@ jobs:
 
     # Only try to publish the container image from the root repo; forks don't have permission to do so and will always get failures.
     - name: Publish container image
-      if: github.repository == 'vmware-tanzu/velero'
+      if: github.repository == 'blackpiglet/velero-test'
       run: |
         docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
        
-        make push-build-image
+        REGISTRY=gcr.io/velero-gcp make push-build-image
